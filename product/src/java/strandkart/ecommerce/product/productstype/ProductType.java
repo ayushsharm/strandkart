@@ -1,4 +1,4 @@
-package strandkart.ecommerce.product.allProducts;
+package strandkart.ecommerce.product.productstype;
 
 import java.util.ArrayList;
 import java.util.List;
