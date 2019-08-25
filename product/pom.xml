@@ -5,8 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ecommerce</groupId>
-    <artifactId>booksinformation</artifactId>
+    <artifactId>product</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    
+    <parent>
+        <groupId>ecommerce</groupId>
+        <artifactId>strandkart</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+
 </project>
