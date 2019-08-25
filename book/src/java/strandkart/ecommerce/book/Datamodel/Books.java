@@ -1,7 +1,8 @@
 package strandkart.ecommerce.book.Datamodel;
 
 import strandkart.ecommerce.product.DataModel.Product;
-import strandkart.ecommerce.book.Datamodel.Binding;
+import strandkart.ecommerce.product.productstype.ProductType;
+import strandkart.ecommerce.book.Binding;
 
 public class Books extends Product {
     private String title;
@@ -20,7 +21,8 @@ public class Books extends Product {
 
     private Float price;
 
-    public Books(String title, String author, String ISBN, String publisher, String language, String year, Binding binding, Float price) {
+    public Books(ProductType type, String title, String author, String ISBN, String publisher, String language, String year, Binding binding, Float price) {
+        super(type);
         this.title = title;
         this.author = author;
         this.ISBN = ISBN;
