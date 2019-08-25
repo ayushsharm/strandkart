@@ -1,4 +1,4 @@
-package strandkart.ecommerce.book.Datamodel;
+package strandkart.ecommerce.book;
 
 import java.util.ArrayList;
 import java.util.List;
