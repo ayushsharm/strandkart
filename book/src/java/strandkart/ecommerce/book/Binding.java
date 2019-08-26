@@ -21,4 +21,5 @@ public enum Binding {
         allBindings.add(DIGITAL);
         return allBindings;
     }
+
 }
