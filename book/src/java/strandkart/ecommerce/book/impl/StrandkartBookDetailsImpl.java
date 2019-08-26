@@ -1,5 +1,5 @@
-package strandkart.ecommerce.book;
+package strandkart.ecommerce.book.impl;
 
-public class StrandkartBookDetails {
+public class StrandkartBookDetailsImpl {
 
 }

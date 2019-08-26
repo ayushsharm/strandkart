@@ -1,0 +1,1 @@
+{"Binding":PAPERBACK,"ISBN":"isbn","Language":"language","Year":"1997","Price":600.0,"Title":"","Author":"author","Publisher":"publisher"}
