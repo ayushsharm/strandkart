@@ -20,7 +20,7 @@ public class Menu {
     public static Set<HashMap<String, Object>> findMatchingBooksWithTitle(ArrayList<HashMap<String, Object>> bookMapList, String bookName) {
         Set<HashMap<String, Object>> booksFound = new HashSet<HashMap<String, Object>>();
         for (HashMap<String, Object> map : bookMapList) {
-            if (bookName == map.get("Title")) {
+            if (bookName.equals(map.get("Title").toString())) {
                 booksFound.add(map);
             }
         }
@@ -30,7 +30,7 @@ public class Menu {
     public static HashMap<String, Object> findMatchingBookWithISBN(Set<HashMap<String, Object>> set, String isbn) {
         HashMap<String, Object> bookFound = new HashMap<String, Object>();
         for(HashMap<String, Object> map1: set){
-            if(map1.get("ISBN")==isbn){
+            if(map1.get("ISBN").toString().equals(isbn)){
                 return bookFound;
             }
         }
@@ -65,17 +65,16 @@ public class Menu {
 
         List<Order> orderList = new ArrayList<Order>();
 
-        JSONObject jsonObject = new JSONObject();
-        for (JSONObject jsonObject1 : bookJSONList) {
+        for (JSONObject jsonObject : bookJSONList) {
             bookMap.clear();
-            bookMap.put("Title", jsonObject1.get("Title"));
-            bookMap.put("Author", jsonObject1.get("Author"));
-            bookMap.put("ISBN", jsonObject1.get("ISBN"));
-            bookMap.put("Publisher", jsonObject1.get("Publisher"));
-            bookMap.put("Language", jsonObject1.get("Language"));
-            bookMap.put("Year", jsonObject1.get("Year"));
-            bookMap.put("Binding", jsonObject1.get("Binding"));
-            bookMap.put("Price", jsonObject1.get("Price"));
+            bookMap.put("Title", jsonObject.get("Title").toString());
+            bookMap.put("Author", jsonObject.get("Author").toString());
+            bookMap.put("ISBN", jsonObject.get("ISBN").toString());
+            bookMap.put("Publisher", jsonObject.get("Publisher").toString());
+            bookMap.put("Language", jsonObject.get("Language").toString());
+            bookMap.put("Year", jsonObject.get("Year").toString());
+            bookMap.put("Binding", jsonObject.get("Binding").toString());
+            bookMap.put("Price", jsonObject.get("Price").toString());
             bookMapList.add(bookMap);
         }
 
@@ -107,8 +106,10 @@ public class Menu {
                     } else System.out.println("No books in stock.");
                     break;
                 case 3:
+                    input.nextLine();
                     System.out.println("Please enter the name of the book");
                     String bookName = input.nextLine();
+                    System.out.println(bookName);
                     Set<HashMap<String, Object>> booksFound = findMatchingBooksWithTitle(bookMapList, bookName);
                     if(booksFound.size()==0){
                         System.out.println("No book with this title is available on StrandKart.");
@@ -126,20 +127,20 @@ public class Menu {
                     }
                     break;
                 case 4:
-                    System.out.println("Please Enter the following details : ");
-                    System.out.print("Title of the Book : ");
+                    input.nextLine();
+                    System.out.print("Please Enter the following details :\n Title of the Book : ");
                     String title = input.nextLine();
-                    System.out.print("\n Author of the Book : ");
+                    System.out.print("Author of the Book : ");
                     String author = input.nextLine();
-                    System.out.print("\nISBN : ");
+                    System.out.print("ISBN : ");
                     String isbn = input.nextLine();
-                    System.out.print("\n Publisher : ");
+                    System.out.print("Publisher : ");
                     String publisher = input.nextLine();
-                    System.out.print("\n Language : ");
+                    System.out.print("Language : ");
                     String language = input.nextLine();
-                    System.out.print("\n Year : ");
+                    System.out.print("Year : ");
                     String year = input.nextLine();
-                    System.out.print("\n Binding (1. PaperBack, 2. Hardbound, 3. Digital) : ");
+                    System.out.print("Binding (1. PaperBack, 2. Hardbound, 3. Digital) : ");
                     Binding binding = null;
                     int option = input.nextInt();
                     if (option == 1) {
@@ -149,7 +150,7 @@ public class Menu {
                     } else if (option == 3) {
                         binding = Binding.DIGITAL;
                     }
-                    System.out.print("\n Price : ");
+                    System.out.print("Price : ");
                     Float price = input.nextFloat();
                     Books book = new Books(ProductType.BOOKS, title, author, isbn, publisher, language, year, binding, price);
                     allBooks.add(book);
