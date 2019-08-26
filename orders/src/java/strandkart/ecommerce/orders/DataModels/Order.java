@@ -1,13 +1,13 @@
 package strandkart.ecommerce.orders.DataModels;
 
-import strandkart.ecommerce.book.Datamodel.Books;
+import strandkart.ecommerce.book.Datamodel.Book;
 import strandkart.ecommerce.user.datamodel.User;
 
 import java.util.Date;
 
 public class Order {
 
-    private Books book;
+    private Book book;
 
     private User user;
 
@@ -17,7 +17,7 @@ public class Order {
 
     private Float orderAmount;
 
-    public Order(Books book, User user, int quantity, Date purchaseDate, Float orderAmount){
+    public Order(Book book, User user, int quantity, Date purchaseDate, Float orderAmount){
         this.book = book;
         this.user = user;
         this.quantity = quantity;
@@ -25,7 +25,7 @@ public class Order {
         this.orderAmount = orderAmount;
     }
 
-    public Books getBook() {
+    public Book getBook() {
         return book;
     }
 
