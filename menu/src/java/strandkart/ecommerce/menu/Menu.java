@@ -5,38 +5,51 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import strandkart.ecommerce.book.Datamodel.Books;
 import strandkart.ecommerce.product.DataModel.Product;
+import strandkart.ecommerce.product.productstype.ProductType;
 
 import java.io.*;
 import java.util.*;
 
 public class Menu {
 
+
     public static void main(String[] args) throws IOException {
 
-        BufferedReader br = new BufferedReader(new FileReader("books.txt"));
+//        BufferedReader br = new BufferedReader(new FileReader("books.txt"));
         JSONParser jsonParser = new JSONParser();
         JSONArray booksList = null;
         try {
-            FileReader reader = new FileReader("Books.json");
+            FileReader reader = new FileReader("books.json");
             Object obj = jsonParser.parse(reader);
             booksList = (JSONArray) obj;
+            reader.close();
         } catch (IOException e){
             e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        List<Books> books = Collections.emptyList();
+        for(int i=0;i<booksList.size();i++){
+            //books.add(new Books());
+            //Add according to the file.
+        }
 
         System.out.println("WELCOME TO STRANDKART.\n" +
-                "Select Option to Continue" +
-                "1. List all Products." +
-                "2. List all Books." +
-                "3. Search a particular book." +
-                "4. Store a new book." +
-                "5. Purchase a book.");
+                "Select Option to Continue\n" +
+                "1. List all Products.\n" +
+                "2. List all Books.\n" +
+                "3. Search a particular book.\n" +
+                "4. Store a new book.\n" +
+                "5. Purchase a book.\n");
         Scanner input = new Scanner(System.in);
-        Integer choice = input.nextInt();
+        int choice = input.nextInt();
         switch (choice) {
             case 1:
+                List<ProductType> products = ProductType.getAllProducts();
+                System.out.println("List of Products : ");
+                for(ProductType product: products) {
+                    System.out.println(product.name());
+                }
                 break;
             case 2:
                 if(booksList.size()>0) {
@@ -45,7 +58,12 @@ public class Menu {
                 else System.out.println("No books in stock.");
                 break;
             case 3:
+                System.out.println("Please enter the name of the book");
                 String bookName = input.next();
+                for(int i = 0;i<booksList.size();i++) {
+                    //Condition for matching String
+
+                }
                 break;
             case 4:
                 System.out.println("Please Enter the following details : ");
@@ -56,6 +74,7 @@ public class Menu {
                 System.out.print("\nISBN : ");
                 String isbn = input.next();
                 System.out.print("\n");
+                break;
 
         }
     }
