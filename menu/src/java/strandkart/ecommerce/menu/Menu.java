@@ -3,6 +3,7 @@ package strandkart.ecommerce.menu;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import strandkart.ecommerce.book.Binding;
 import strandkart.ecommerce.book.Datamodel.Books;
 import strandkart.ecommerce.product.DataModel.Product;
 import strandkart.ecommerce.product.productstype.ProductType;
@@ -73,7 +74,25 @@ public class Menu {
                 String author = input.next();
                 System.out.print("\nISBN : ");
                 String isbn = input.next();
-                System.out.print("\n");
+                System.out.print("\n Publisher : ");
+                String publisher = input.next();
+                System.out.println("\n Language : ");
+                String language = input.next();
+                System.out.println("\n Year : ");
+                String year = input.next();
+                System.out.println("\n Binding (1. PaperBack, 2. Hardbound, 3. Digital) : ");
+                Binding binding = null;
+                int option = input.nextInt();
+                if(option==1){
+                    binding = Binding.PAPERBACK;
+                }
+                else if(option==2){
+                    binding = Binding.HARDBOUND;
+                }
+                else if(option==3){
+                    binding = Binding.DIGITAL;
+                }
+                
                 break;
 
         }
