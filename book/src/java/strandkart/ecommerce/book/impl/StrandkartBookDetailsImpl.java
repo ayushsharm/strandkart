@@ -12,7 +12,10 @@ import java.util.List;
 
 public class StrandkartBookDetailsImpl implements StrandKartBookDetails {
 
-    private List<Book> allBooks = new ArrayList<Book>(Arrays.asList(
+    public StrandkartBookDetailsImpl(){
+    }
+
+    private static List<Book> allBooks = new ArrayList<Book>(Arrays.asList(
             new Book(ProductType.BOOKS, "Harry Potter 1", "J. K. Rowling", "isbn123", "Scholastic", "English ", "1997", Binding.HARDBOUND, 232.66),
             new Book(ProductType.BOOKS, "Harry Potter 2", "J. K. Rowling", "isbn234", "Scholastic", "English ", "1997", Binding.HARDBOUND, 232.66),
             new Book(ProductType.BOOKS, "Harry Potter 3", "J. K. Rowling", "isbn345", "Scholastic", "English ", "1997", Binding.HARDBOUND, 232.66),
@@ -34,42 +37,62 @@ public class StrandkartBookDetailsImpl implements StrandKartBookDetails {
             new Book(ProductType.BOOKS, "Harry Potter 19", "J. K. Rowling", "isbn007", "Scholastic", "English ", "1997", Binding.HARDBOUND, 232.66),
             new Book(ProductType.BOOKS, "Harry Potter 20", "J. K. Rowling", "isbn008", "Scholastic", "English ", "1997", Binding.HARDBOUND, 232.66),
             new Book(ProductType.BOOKS, "Harry Potter 21", "J. K. Rowling", "isbn413", "Scholastic", "English ", "1997", Binding.HARDBOUND, 232.66),
-            new Book(ProductType.BOOKS, "Harry Potter 22", "J. K. Rowling", "isbn333", "Scholastic", "English ", "1997", Binding.HARDBOUND, 232.66),
+            new Book(ProductType.BOOKS, "Harry Potter 22", "J. K. Rowling", "isbn333", "Scholastic", "English ", "1997", Binding.HARDBOUND, 232.66)
     ));
 
-    private HashMap<String, String> isbnTitleMap = new HashMap<String, String>(){{
-        put("Harry Potter 1", "isbn123");
-        put("Harry Potter 2", "isbn234");
-        put("Harry Potter 3", "isbn345");
-        put("Harry Potter 4", "isbn456");
-        put("Harry Potter 5", "isbn567");
-        put("Harry Potter 6", "isbn458");
-        put("Harry Potter 7", "isbn754");
-        put("Harry Potter 8", "isbn842");
-        put("Harry Potter 9", "isbn451");
-        put("Harry Potter 10", "isbn412");
-        put("Harry Potter 11", "isbn542");
-        put("Harry Potter 12", "isbn874");
-        put("Harry Potter 13", "isbn321");
-        put("Harry Potter 14", "isbn654");
-        put("Harry Potter 15", "isbn777");
-        put("Harry Potter 16", "isbn888");
-        put("Harry Potter 17", "isbn555");
-        put("Harry Potter 18", "isbn000");
-        put("Harry Potter 19", "isbn007");
-        put("Harry Potter 20", "isbn008");
-        put("Harry Potter 21", "isbn413");
-        put("Harry Potter 22", "isbn333");
+    private static HashMap<String, Book> isbnTitleMap = new HashMap<String, Book>(){{
+        put("Harry Potter 1", allBooks.get(0));
+        put("Harry Potter 2", allBooks.get(1));
+        put("Harry Potter 3", allBooks.get(2));
+        put("Harry Potter 4", allBooks.get(3));
+        put("Harry Potter 5", allBooks.get(4));
+        put("Harry Potter 6", allBooks.get(5));
+        put("Harry Potter 7", allBooks.get(6));
+        put("Harry Potter 8", allBooks.get(7));
+        put("Harry Potter 9", allBooks.get(8));
+        put("Harry Potter 10", allBooks.get(9));
+        put("Harry Potter 11", allBooks.get(10));
+        put("Harry Potter 12", allBooks.get(11));
+        put("Harry Potter 13", allBooks.get(12));
+        put("Harry Potter 14", allBooks.get(13));
+        put("Harry Potter 15", allBooks.get(14));
+        put("Harry Potter 16", allBooks.get(15));
+        put("Harry Potter 17", allBooks.get(16));
+        put("Harry Potter 18", allBooks.get(17));
+        put("Harry Potter 19", allBooks.get(18));
+        put("Harry Potter 20", allBooks.get(19));
+        put("Harry Potter 21", allBooks.get(20));
+        put("Harry Potter 22", allBooks.get(21));
     }};
+
+
     public List<Book> getAllBooks() {
+        System.out.println(allBooks.size());
         return allBooks;
     }
 
-    public List<Book> searchBookUsingTitle(String bookName) {
-        if(isbnTitleMap.containsKey(isbnTitleMap)){
-            return
+    public Book searchBookUsingTitle(String bookName) {
+        if(isbnTitleMap.containsKey(bookName)){
+            return isbnTitleMap.get(bookName);
         }
+        return null;
+    }
 
+    public Book searchBookUsingIsbn(List<Book> books, String isbn) {
+        for(Book book : books){
+            if(book.getISBN().equals(isbn)){
+                return book;
+            }
+        }
+        return null;
+    }
+
+    public void addNewBook(ProductType productType, String title, String author, String isbn, String publisher, String language, String year, Binding binding, Double price){
+        if(isbnTitleMap.containsKey(title)){
+            System.out.println("Book already present");
+            return;
+        }
+        allBooks.add(new Book(productType, title, author, isbn, publisher, language, year, binding, price));
     }
 
 }
