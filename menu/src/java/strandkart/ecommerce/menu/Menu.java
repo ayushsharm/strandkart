@@ -14,13 +14,14 @@ import java.util.Scanner;
 public class Menu {
 
     public static void main(String[] args) throws IOException {
-        StrandKartBookDetails strandKartBookDetails = new StrandkartBookDetailsImpl();
+        final String fileName = "books.txt";
+        StrandKartBookDetails strandKartBookDetails = new StrandkartBookDetailsImpl(fileName);
 
         System.out.println("WELCOME TO STRAND-KART.\n" +
                 "Select Option to Continue\n" +
                 "1. List all Products.\n" +
                 "2. List all Book.\n" +
-                "3. Get Sorted List" +
+                "3. Get Sorted List\n" +
                 "4. Search a particular book.\n" +
                 "5. Store a new book.\n" +
                 "6. Purchase a book.\n" +
@@ -49,6 +50,8 @@ public class Menu {
                     }
                     break;
                 case 3:
+
+                case 4:
                     input.nextLine();
                     System.out.println("Please enter the name of the book");
                     String bookName = input.nextLine();
@@ -58,22 +61,8 @@ public class Menu {
                         break;
                     }
                     System.out.println(book.toString());
-//                    List<Book> books = strandKartBookDetails.searchBookUsingTitle(bookName);
-//                    if(books.size()==0){
-//                        System.out.println("No books available with this title.");
-//                        break;
-//                    }
-//                    if(books.size()==1) {
-//                        System.out.println(books.get(0).toString());
-//                    }
-//                    else{
-//                        System.out.println("Multiple books found with same title. Please provide ISBN number : ");
-//                        String isbn = input.nextLine();
-//                        Book book = strandKartBookDetails.searchBookUsingIsbn(books, isbn);
-//                        System.out.println(book.toString());
-//                    }
                     break;
-                case 4:
+                case 5:
                     input.nextLine();
                     System.out.print("Please Enter the following details :\n Title of the Book : ");
                     String title = input.nextLine();
@@ -102,7 +91,7 @@ public class Menu {
                     ProductType productType = ProductType.BOOKS;
                     strandKartBookDetails.addNewBook(productType, title, author, isbn, publisher, language, year, binding, price);
                     break;
-                case 5:
+                case 6:
                     input.nextLine();
                     System.out.println("Welcome to StrandKart Order placement.\n Please enter the book Title you want to purchase");
                     title = input.nextLine();
@@ -113,27 +102,23 @@ public class Menu {
                     }
                     System.out.println("How many books would you like to purchase");
                     int quantity = input.nextInt();
-                    Double orderAmount = quantity*book.getPrice();
+                    double orderAmount = quantity*book.getPrice();
                     System.out.println("Order placed for book : " + book.toString()+"Total amount : ₹" + orderAmount+"\n");
-//                    System.out.println("Please Enter your Name : ");
-//                    String userName = input.nextLine();
-//                    System.out.println("Please Enter your contact Number : ");
-//                    String contactNumber = input.nextLine();
-//                    System.out.println("Please Enter the quantity of items you want to purchase.");
-//                    Integer quantity = input.nextInt();
                     break;
-                case 6:
+                case 7:
                     System.out.println("Thank you for using StrandKart");
+                    strandKartBookDetails.close(fileName);
                     break;
             }
-            if (choice != 6) {
+            if (choice != 7) {
                 System.out.println("Select Option to Continue\n" +
                         "1. List all Products.\n" +
                         "2. List all Book.\n" +
-                        "3. Search a particular book.\n" +
-                        "4. Store a new book.\n" +
-                        "5. Purchase a book.\n" +
-                        "6. Exit.");
+                        "3. Get Sorted List\n" +
+                        "4. Search a particular book.\n" +
+                        "5. Store a new book.\n" +
+                        "6. Purchase a book.\n" +
+                        "7. Exit.");
             }
         }
     }
