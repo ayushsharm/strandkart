@@ -5,20 +5,18 @@ import strandkart.ecommerce.book.Datamodel.Book;
 import strandkart.ecommerce.book.service.StrandKartBookDetails;
 import strandkart.ecommerce.product.productstype.ProductType;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class StrandkartBookDetailsImpl implements StrandKartBookDetails {
 
     public StrandkartBookDetailsImpl(){
+        init();
     }
 
     private static List<Book> allBooks = new ArrayList<Book>(Arrays.asList(
             new Book(ProductType.BOOKS, "Harry Potter 1", "J. K. Rowling", "isbn123", "Scholastic", "English ", "1997", Binding.HARDBOUND, 232.66),
-            new Book(ProductType.BOOKS, "Harry Potter 2", "J. K. Rowling", "isbn234", "Scholastic", "English ", "1997", Binding.HARDBOUND, 232.66),
-            new Book(ProductType.BOOKS, "Harry Potter 3", "J. K. Rowling", "isbn345", "Scholastic", "English ", "1997", Binding.HARDBOUND, 232.66),
+            new Book(ProductType.BOOKS, "Harry Potter 3", "J. K. Rowling", "isbn234", "Scholastic", "English ", "1997", Binding.HARDBOUND, 232.66),
+            new Book(ProductType.BOOKS, "Harry Potter 2", "J. K. Rowling", "isbn345", "Scholastic", "English ", "1997", Binding.HARDBOUND, 232.66),
             new Book(ProductType.BOOKS, "Harry Potter 4", "J. K. Rowling", "isbn456", "Scholastic", "English ", "1997", Binding.HARDBOUND, 232.66),
             new Book(ProductType.BOOKS, "Harry Potter 5", "J. K. Rowling", "isbn567", "Scholastic", "English ", "1997", Binding.HARDBOUND, 232.66),
             new Book(ProductType.BOOKS, "Harry Potter 6", "J. K. Rowling", "isbn458", "Scholastic", "English ", "1997", Binding.HARDBOUND, 232.66),
@@ -40,7 +38,7 @@ public class StrandkartBookDetailsImpl implements StrandKartBookDetails {
             new Book(ProductType.BOOKS, "Harry Potter 22", "J. K. Rowling", "isbn333", "Scholastic", "English ", "1997", Binding.HARDBOUND, 232.66)
     ));
 
-    private static HashMap<String, Book> isbnTitleMap = new HashMap<String, Book>(){{
+    private static TreeMap<String, Book> isbnTitleMap = new TreeMap<String, Book>(){{
         put("Harry Potter 1", allBooks.get(0));
         put("Harry Potter 2", allBooks.get(1));
         put("Harry Potter 3", allBooks.get(2));
@@ -65,6 +63,10 @@ public class StrandkartBookDetailsImpl implements StrandKartBookDetails {
         put("Harry Potter 22", allBooks.get(21));
     }};
 
+
+    private void init() {
+        
+    }
 
     public List<Book> getAllBooks() {
         System.out.println(allBooks.size());
