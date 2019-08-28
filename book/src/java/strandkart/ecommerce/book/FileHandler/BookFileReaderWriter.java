@@ -1,12 +1,10 @@
 package strandkart.ecommerce.book.FileHandler;
 
+import strandkart.ecommerce.book.Binding;
 import strandkart.ecommerce.book.Datamodel.Book;
 import strandkart.ecommerce.product.productstype.ProductType;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -33,12 +31,32 @@ public class BookFileReaderWriter {
                 dataArray.add(tokenizer.nextElement().toString());
             }
             System.out.println(dataArray.size());
-            Book book = new Book(ProductType.BOOKS, );
+            Binding binding = null;
+            String bindingName = dataArray.get(6);
+            if(bindingName.equals("Hardbound")){
+                binding = Binding.HARDBOUND;
+            }
+            else if(bindingName.equals("Paperback")){
+                binding = Binding.PAPERBACK;
+            }
+            else if(bindingName.equals("Digital")){
+                binding = Binding.DIGITAL;
+            }
+            Book book = new Book(ProductType.BOOKS, dataArray.get(0), dataArray.get(1), dataArray.get(2),
+                    dataArray.get(3), dataArray.get(4), dataArray.get(5), binding, Double.parseDouble(dataArray.get(7)));
+            books.add(book);
+            line = reader.readLine();
         }
         return books;
     }
 
-    public void writeToFile() {
+    public void writeToFile(List<Book> books) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+        for(Book book : books){
+            writer.write(book.getTitle()+"\t"+book.getAuthor()+"\t"+book.getISBN()+"\t" +
+                    book.getPublisher()+"\t"+book.getLanguage()+"\t"+book.getYear()+"\t"+
+                    book.getBinding().name()+"\t"+book.getPrice().toString()+"\n");
+        }
 
     }
 
