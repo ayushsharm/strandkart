@@ -20,10 +20,11 @@ public class Menu {
                 "Select Option to Continue\n" +
                 "1. List all Products.\n" +
                 "2. List all Book.\n" +
-                "3. Search a particular book.\n" +
-                "4. Store a new book.\n" +
-                "5. Purchase a book.\n" +
-                "6. Exit.");
+                "3. Get Sorted List" +
+                "4. Search a particular book.\n" +
+                "5. Store a new book.\n" +
+                "6. Purchase a book.\n" +
+                "7. Exit.");
 
         Scanner input = new Scanner(System.in);
 
