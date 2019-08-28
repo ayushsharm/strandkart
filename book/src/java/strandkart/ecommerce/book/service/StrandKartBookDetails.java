@@ -4,6 +4,7 @@ import strandkart.ecommerce.book.Binding;
 import strandkart.ecommerce.book.Datamodel.Book;
 import strandkart.ecommerce.product.productstype.ProductType;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface StrandKartBookDetails {
@@ -15,4 +16,8 @@ public interface StrandKartBookDetails {
     Book searchBookUsingIsbn(List<Book> books, String isbn);
 
     void addNewBook(ProductType productType, String title, String author, String isbn, String publisher, String language, String year, Binding binding, Double price);
+
+    void close(String filename) throws IOException;
+
+
 }
