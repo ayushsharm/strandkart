@@ -1,12 +1,10 @@
 package strandkart.ecommerce.book.impl;
 
-import strandkart.ecommerce.book.Binding;
 import strandkart.ecommerce.book.Datamodel.Book;
 import strandkart.ecommerce.book.FileHandler.BookFileReaderWriter;
 import strandkart.ecommerce.book.Sorting;
 import strandkart.ecommerce.book.SortingOrder;
 import strandkart.ecommerce.book.service.StrandKartBookDetails;
-import strandkart.ecommerce.product.productstype.ProductType;
 
 import java.io.IOException;
 import java.util.*;
@@ -27,6 +25,7 @@ public class StrandkartBookDetailsImpl implements StrandKartBookDetails {
 
         BookFileReaderWriter bookFileReaderWriter = new BookFileReaderWriter(fileName);
         allBooks = bookFileReaderWriter.readFromFile();
+
 
         for (Book book : allBooks) {
             addToMaps(book);
@@ -60,53 +59,64 @@ public class StrandkartBookDetailsImpl implements StrandKartBookDetails {
     }
 
     private void addToMaps(Book book) {
-        List<Book> books1 = Collections.singletonList(book);
+        List<Book> books1 = new ArrayList<Book>();
+        books1.add(book);
         List<Book> tempBookList = new ArrayList<Book>();
         if (titleBookMap.containsKey(book.getTitle())) {
             List<Book> bookfromMap = titleBookMap.get(book.getTitle());
+//            if(bookfromMap.size()==0){
+//                System.out.println("Why zero");
+//            }
             tempBookList.addAll(bookfromMap);
             tempBookList.add(book);
             titleBookMap.put(book.getTitle(), tempBookList);
             tempBookList.clear();
-        }
-        else{
-            titleBookMap.put(book.getTitle(),books1);
+        } else {
+            titleBookMap.put(book.getTitle(), books1);
         }
 
-        if(authorBookMap.containsKey(book.getAuthor())){
+        if (authorBookMap.containsKey(book.getAuthor())) {
             List<Book> bookfromMap = authorBookMap.get(book.getAuthor());
             tempBookList.addAll(bookfromMap);
             tempBookList.add(book);
-            titleBookMap.put(book.getAuthor(), tempBookList);
+            authorBookMap.put(book.getAuthor(), tempBookList);
             tempBookList.clear();
-        }
-        else{
-            authorBookMap.put(book.getAuthor(),books1);
+        } else {
+            authorBookMap.put(book.getAuthor(), books1);
         }
 
-        if(yearBookMap.containsKey(book.getYear())){
+        if (yearBookMap.containsKey(book.getYear())) {
             List<Book> bookfromMap = yearBookMap.get(book.getYear());
             tempBookList.addAll(bookfromMap);
             tempBookList.add(book);
-            titleBookMap.put(book.getTitle(), tempBookList);
+            yearBookMap.put(book.getYear(), tempBookList);
             tempBookList.clear();
-        }
-        else{
-            authorBookMap.put(book.getYear(),books1);
+        } else {
+            yearBookMap.put(book.getYear(), books1);
         }
     }
 
     public List<Book> getSortedBookList(Sorting sorting, SortingOrder sortingOrder) {
-        List<Book> booksSorted = new ArrayList<Book>();
+
         if (sorting == Sorting.AUTHOR) {
-            booksSorted = createListWithTreeMap(authorBookMap);
+            return getBooks(sortingOrder, authorBookMap);
         } else if (sorting == Sorting.TITLE) {
-            booksSorted = createListWithTreeMap(titleBookMap);
+            return getBooks(sortingOrder, titleBookMap);
+        } else {
+            return getBooks(sortingOrder, yearBookMap);
         }
-        else{
-            booksSorted = createListWithTreeMap(yearBookMap);
+    }
+
+    private List<Book> getBooks(SortingOrder sortingOrder, TreeMap<String, List<Book>> bookMap) {
+        if (sortingOrder == SortingOrder.ASCENDING) {
+            return createListWithTreeMap(bookMap);
+        } else {
+            TreeMap<String, List<Book>> reverseTreeMap = new TreeMap<String, List<Book>>(Collections.reverseOrder());
+            for (Map.Entry<String, List<Book>> entry : bookMap.entrySet()) {
+                reverseTreeMap.put(entry.getKey(), entry.getValue());
+            }
+            return createListWithTreeMap(reverseTreeMap);
         }
-        return booksSorted;
     }
 
     public void close(String fileName) throws IOException {
@@ -118,12 +128,19 @@ public class StrandkartBookDetailsImpl implements StrandKartBookDetails {
         Set set = map.entrySet();
         Iterator iterator = set.iterator();
         List<Book> booksSorted = new ArrayList<Book>();
-
+        int counter=0;
         while (iterator.hasNext()) {
             Map.Entry me = (Map.Entry) iterator.next();
             List<Book> tempBookList = map.get(me.getKey());
-            booksSorted.addAll(tempBookList);
+            if(tempBookList.size()>1){
+                counter++;
+            }
+            for(Book book: tempBookList){
+                booksSorted.add(book);
+            }
         }
+        System.out.println("Counter for 0 = "+counter);
+        System.out.println(booksSorted.size());
         return booksSorted;
     }
 }
