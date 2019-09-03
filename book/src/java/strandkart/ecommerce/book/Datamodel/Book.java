@@ -21,8 +21,8 @@ public class Book extends Product {
 
     private Double price;
 
-    public Book(ProductType type, String title, String author, String ISBN, String publisher, String language, String year, Binding binding, Double price) {
-        super(type);
+    public Book(String title, String author, String ISBN, String publisher, String language, String year, Binding binding, Double price) {
+        super(ProductType.BOOKS);
         this.title = title;
         this.author = author;
         this.ISBN = ISBN;
