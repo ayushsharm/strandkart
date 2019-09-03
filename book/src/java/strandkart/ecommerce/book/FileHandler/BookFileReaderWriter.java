@@ -30,7 +30,6 @@ public class BookFileReaderWriter {
             while(tokenizer.hasMoreElements()){
                 dataArray.add(tokenizer.nextElement().toString());
             }
-            System.out.println(dataArray.size());
             Binding binding = null;
             String bindingName = dataArray.get(6);
             if(bindingName.equals("Hardbound")){
@@ -42,8 +41,9 @@ public class BookFileReaderWriter {
             else if(bindingName.equals("Digital")){
                 binding = Binding.DIGITAL;
             }
-            Book book = new Book(ProductType.BOOKS, dataArray.get(0), dataArray.get(1), dataArray.get(2),
-                    dataArray.get(3), dataArray.get(4), dataArray.get(5), binding, Double.parseDouble(dataArray.get(7)));
+            int i=0;
+            Book book = new Book(dataArray.get(i++), dataArray.get(i++), dataArray.get(i++),
+                    dataArray.get(i++), dataArray.get(i++), dataArray.get(i++), binding, Double.parseDouble(dataArray.get(++i)));
             books.add(book);
             line = reader.readLine();
         }
