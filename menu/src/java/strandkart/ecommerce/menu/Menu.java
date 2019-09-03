@@ -23,7 +23,7 @@ public class Menu {
         System.out.println("Starting Init");
         StrandKartBookDetails strandKartBookDetails = new StrandkartBookDetailsImpl(fileName);
         long initEndTime = System.currentTimeMillis();
-        System.out.println(String.format("Time taken to load 1 million book data and Initialize the list and maps : %d ms" , initEndTime-initStartTime));
+        System.out.println(String.format("Time taken to load 1 million book data and Initialize the list and maps : %d ms", initEndTime - initStartTime));
         System.out.println("Initialization done");
 
         System.out.println("WELCOME TO STRAND-KART.\n" +
@@ -91,11 +91,9 @@ public class Menu {
                     int option1 = input.nextInt();
                     if (option1 == 1) {
                         sortingOrder = SortingOrder.ASCENDING;
-                    }
-                    else if (option1 == 2) {
+                    } else if (option1 == 2) {
                         sortingOrder = SortingOrder.DESCENDING;
-                    }
-                    else{
+                    } else {
                         System.out.println("Invalid option selected!!!!!!!!!!!!!!!");
                         break;
                     }
@@ -103,7 +101,7 @@ public class Menu {
                     List<Book> sortedBookList = strandKartBookDetails.getSortedBookList(sorting, sortingOrder);
                     System.out.println(sortedBookList.size());
                     long sortEndTime = System.currentTimeMillis();
-                    System.out.println(String.format("Time taken to sort list : %d ms", sortEndTime-sortStartTime));
+                    System.out.println(String.format("Time taken to sort list : %d ms", sortEndTime - sortStartTime));
                     counter = 0;
                     for (Book book : sortedBookList) {
                         System.out.println(book);
@@ -192,19 +190,19 @@ public class Menu {
                     System.out.println("Thank you for using StrandKart");
                     break;
             }
-            if (choice != 7) {
-                System.out.println("Select Option to Continue\n" +
-                        "1. List all Products.\n" +
-                        "2. List all Book.\n" +
-                        "3. Get Sorted List\n" +
-                        "4. Search a particular book.\n" +
-                        "5. Store a new book.\n" +
-                        "6. Purchase a book.\n" +
-                        "7. Exit.");
-            }
-            else{
+            if (choice == 7) {
                 break;
+            } else if (choice < 0 || choice > 7) {
+                System.out.println("Invalid option selected");
             }
+            System.out.println("Select Option to Continue\n" +
+                    "1. List all Products.\n" +
+                    "2. List all Book.\n" +
+                    "3. Get Sorted List\n" +
+                    "4. Search a particular book.\n" +
+                    "5. Store a new book.\n" +
+                    "6. Purchase a book.\n" +
+                    "7. Exit.");
         }
     }
 }
