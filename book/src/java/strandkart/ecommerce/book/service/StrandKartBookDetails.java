@@ -1,10 +1,8 @@
 package strandkart.ecommerce.book.service;
 
-import strandkart.ecommerce.book.Binding;
 import strandkart.ecommerce.book.Datamodel.Book;
 import strandkart.ecommerce.book.Sorting;
 import strandkart.ecommerce.book.SortingOrder;
-import strandkart.ecommerce.product.productstype.ProductType;
 
 import java.io.IOException;
 import java.util.List;
