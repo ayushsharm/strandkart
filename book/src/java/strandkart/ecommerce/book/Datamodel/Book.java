@@ -1,8 +1,8 @@
 package strandkart.ecommerce.book.Datamodel;
 
+import strandkart.ecommerce.book.Bindings;
 import strandkart.ecommerce.product.DataModel.Product;
 import strandkart.ecommerce.product.productstype.ProductType;
-import strandkart.ecommerce.book.Binding;
 
 public class Book extends Product {
     private String title;
@@ -17,11 +17,11 @@ public class Book extends Product {
 
     private String year;
 
-    private Binding binding;
+    private Bindings bindings;
 
     private Double price;
 
-    public Book(String title, String author, String ISBN, String publisher, String language, String year, Binding binding, Double price) {
+    public Book(String title, String author, String ISBN, String publisher, String language, String year, Bindings bindings, Double price) {
         super(ProductType.BOOKS);
         this.title = title;
         this.author = author;
@@ -29,7 +29,7 @@ public class Book extends Product {
         this.publisher = publisher;
         this.language = language;
         this.year = year;
-        this.binding = binding;
+        this.bindings = bindings;
         this.price = price;
     }
 
@@ -57,8 +57,8 @@ public class Book extends Product {
         return year;
     }
 
-    public Binding getBinding() {
-        return binding;
+    public Bindings getBindings() {
+        return bindings;
     }
 
     public Double getPrice() {
@@ -73,7 +73,7 @@ public class Book extends Product {
                 "Publisher : %s\n" +
                 "Language : %s\n" +
                 "Year : %s\n" +
-                "Binding : %s\n" +
-                "Price : %2f\n", title, author, ISBN, publisher, language, year, binding.name(), price);
+                "Bindings : %s\n" +
+                "Price : %2f\n", title, author, ISBN, publisher, language, year, bindings.name(), price);
     }
 }
