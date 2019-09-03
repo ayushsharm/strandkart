@@ -2,6 +2,8 @@ package strandkart.ecommerce.book.service;
 
 import strandkart.ecommerce.book.Binding;
 import strandkart.ecommerce.book.Datamodel.Book;
+import strandkart.ecommerce.book.Sorting;
+import strandkart.ecommerce.book.SortingOrder;
 import strandkart.ecommerce.product.productstype.ProductType;
 
 import java.io.IOException;
@@ -11,13 +13,15 @@ public interface StrandKartBookDetails {
 
     List<Book> getAllBooks();
 
-    Book searchBookUsingTitle(String bookName);
+    List<Book> searchBookUsingTitle(String bookName);
 
     Book searchBookUsingIsbn(List<Book> books, String isbn);
 
-    void addNewBook(ProductType productType, String title, String author, String isbn, String publisher, String language, String year, Binding binding, Double price);
+    void addNewBook(Book book);
 
     void close(String filename) throws IOException;
+
+    List<Book> getSortedBookList(Sorting sorting, SortingOrder sortingOrder);
 
 
 }
