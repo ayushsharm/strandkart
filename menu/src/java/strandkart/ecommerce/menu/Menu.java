@@ -1,8 +1,9 @@
 package strandkart.ecommerce.menu;
 
-import com.google.inject.Inject;
 import strandkart.ecommerce.book.Binding;
 import strandkart.ecommerce.book.Datamodel.Book;
+import strandkart.ecommerce.book.Sorting;
+import strandkart.ecommerce.book.SortingOrder;
 import strandkart.ecommerce.book.impl.StrandkartBookDetailsImpl;
 import strandkart.ecommerce.book.service.StrandKartBookDetails;
 import strandkart.ecommerce.product.productstype.ProductType;
@@ -14,6 +15,9 @@ import java.util.Scanner;
 public class Menu {
 
     public static void main(String[] args) throws IOException {
+//        RandomFileGenerator randomFileGenerator = new RandomFileGenerator();
+//        randomFileGenerator.createCsvFileWithRandomValues();
+
         final String fileName = "books.txt";
         StrandKartBookDetails strandKartBookDetails = new StrandkartBookDetailsImpl(fileName);
 
@@ -45,22 +49,75 @@ public class Menu {
                     break;
                 case 2:
                     List<Book> allBooks = strandKartBookDetails.getAllBooks();
-                    for(Book book : allBooks){
+                    int counter = 0;
+                    for (Book book : allBooks) {
                         System.out.println(book.toString());
+                        counter++;
+                        if (counter % 10 == 0) {
+                            System.out.println("Press 0 to end display\n Press any other key to continue.");
+                            if (input.nextInt() == 0) {
+                                break;
+                            }
+                        }
                     }
                     break;
                 case 3:
-
+                    input.nextLine();
+                    System.out.println("Select the column with which you want the sorted list : \n" +
+                            "1. Title of the book.\n" +
+                            "2. Author of the book.\n" +
+                            "3. Year of publishing");
+                    int option = input.nextInt();
+                    Sorting sorting = null;
+                    if (option == 1) {
+                        sorting = Sorting.TITLE;
+                    } else if (option == 2) {
+                        sorting = Sorting.AUTHOR;
+                    } else if (option == 3) {
+                        sorting = Sorting.YEAR;
+                    } else {
+                        System.out.println("Invalid option selected!!!!!!!!!!!!!");
+                    }
+                    SortingOrder sortingOrder = null;
+                    System.out.println("Please specify the sorting option :\n" +
+                            "1. Ascending.\n" +
+                            "2. Descending");
+                    option = input.nextInt();
+                    if (option == 1) {
+                        sortingOrder = SortingOrder.ASCENDING;
+                    }
+                    if (option == 2) {
+                        sortingOrder = SortingOrder.DESCENDING;
+                    }
+                    List<Book> sortedBookList = strandKartBookDetails.getSortedBookList(sorting, sortingOrder);
+                    counter = 0;
+                    for (Book book : sortedBookList) {
+                        System.out.println(book);
+                        counter++;
+                        if (counter % 10 == 0) {
+                            System.out.println("Press 0 to end display\n Press any other key to continue.");
+                            if (input.nextInt() == 0) {
+                                break;
+                            }
+                        }
+                    }
+                    break;
                 case 4:
                     input.nextLine();
                     System.out.println("Please enter the name of the book");
                     String bookName = input.nextLine();
-                    Book book = strandKartBookDetails.searchBookUsingTitle(bookName);
-                    if(book==null){
+                    List<Book> books = strandKartBookDetails.searchBookUsingTitle(bookName);
+                    if (books == null) {
                         System.out.println("No books available with this title.");
                         break;
+                    } else if (books.size() == 1) {
+                        System.out.println(books.get(0));
+                    } else {
+                        System.out.println(String.format("%d books found with the title %s. Please provide with the ISBN number :", books.size(), bookName));
+                        String isbn = input.nextLine();
+                        Book book = strandKartBookDetails.searchBookUsingIsbn(books, isbn);
+                        System.out.println(book);
                     }
-                    System.out.println(book.toString());
                     break;
                 case 5:
                     input.nextLine();
@@ -78,7 +135,7 @@ public class Menu {
                     String year = input.nextLine();
                     System.out.print("Binding (1. PaperBack, 2. Hardbound, 3. Digital) : ");
                     Binding binding = null;
-                    int option = input.nextInt();
+                    option = input.nextInt();
                     if (option == 1) {
                         binding = Binding.PAPERBACK;
                     } else if (option == 2) {
@@ -89,21 +146,32 @@ public class Menu {
                     System.out.print("Price : ");
                     Double price = input.nextDouble();
                     ProductType productType = ProductType.BOOKS;
-                    strandKartBookDetails.addNewBook(productType, title, author, isbn, publisher, language, year, binding, price);
+                    Book book = new Book(title, author, isbn, publisher, language, year, binding, price);
+                    strandKartBookDetails.addNewBook(book);
                     break;
                 case 6:
                     input.nextLine();
                     System.out.println("Welcome to StrandKart Order placement.\n Please enter the book Title you want to purchase");
                     title = input.nextLine();
-                    book = strandKartBookDetails.searchBookUsingTitle(title);
-                    if(book==null){
+                    books = strandKartBookDetails.searchBookUsingTitle(title);
+                    if (books == null) {
                         System.out.println("No book with this title is available on StrandKart.");
                         break;
+                    } else if (books.size() == 1) {
+                        book = books.get(0);
+                    } else {
+                        System.out.println(String.format("%d books found with the title %s. Please provide with the ISBN number :", books.size(), title));
+                        isbn = input.nextLine();
+                        book = strandKartBookDetails.searchBookUsingIsbn(books, isbn);
+                        if (book == null) {
+                            System.out.println("No such books found");
+                            break;
+                        }
                     }
                     System.out.println("How many books would you like to purchase");
                     int quantity = input.nextInt();
-                    double orderAmount = quantity*book.getPrice();
-                    System.out.println("Order placed for book : " + book.toString()+"Total amount : ₹" + orderAmount+"\n");
+                    double orderAmount = quantity * book.getPrice();
+                    System.out.println("Order placed for book : " + book.toString() + "Total amount : ₹" + orderAmount + "\n");
                     break;
                 case 7:
                     System.out.println("Thank you for using StrandKart");
