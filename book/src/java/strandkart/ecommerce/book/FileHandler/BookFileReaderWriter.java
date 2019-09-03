@@ -1,8 +1,7 @@
 package strandkart.ecommerce.book.FileHandler;
 
-import strandkart.ecommerce.book.Binding;
+import strandkart.ecommerce.book.Bindings;
 import strandkart.ecommerce.book.Datamodel.Book;
-import strandkart.ecommerce.product.productstype.ProductType;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -30,20 +29,20 @@ public class BookFileReaderWriter {
             while(tokenizer.hasMoreElements()){
                 dataArray.add(tokenizer.nextElement().toString());
             }
-            Binding binding = null;
+            Bindings bindings = null;
             String bindingName = dataArray.get(6);
             if(bindingName.equals("Hardbound")){
-                binding = Binding.HARDBOUND;
+                bindings = Bindings.HARDBOUND;
             }
             else if(bindingName.equals("Paperback")){
-                binding = Binding.PAPERBACK;
+                bindings = Bindings.PAPERBACK;
             }
             else if(bindingName.equals("Digital")){
-                binding = Binding.DIGITAL;
+                bindings = Bindings.DIGITAL;
             }
             int i=0;
             Book book = new Book(dataArray.get(i++), dataArray.get(i++), dataArray.get(i++),
-                    dataArray.get(i++), dataArray.get(i++), dataArray.get(i++), binding, Double.parseDouble(dataArray.get(++i)));
+                    dataArray.get(i++), dataArray.get(i++), dataArray.get(i++), bindings, Double.parseDouble(dataArray.get(++i)));
             books.add(book);
             line = reader.readLine();
         }
@@ -55,7 +54,7 @@ public class BookFileReaderWriter {
         for(Book book : books){
             writer.write(book.getTitle()+"\t"+book.getAuthor()+"\t"+book.getISBN()+"\t" +
                     book.getPublisher()+"\t"+book.getLanguage()+"\t"+book.getYear()+"\t"+
-                    book.getBinding().name()+"\t"+book.getPrice().toString()+"\n");
+                    book.getBindings().name()+"\t"+book.getPrice().toString()+"\n");
         }
 
     }
