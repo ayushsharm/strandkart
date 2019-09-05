@@ -6,6 +6,7 @@ import strandkart.ecommerce.book.SortingOrder;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.TreeMap;
 
 public interface StrandKartBookDetails {
 
@@ -19,7 +20,7 @@ public interface StrandKartBookDetails {
 
     void close(String filename) throws IOException;
 
-    List<Book> getSortedBookList(Sorting sorting, SortingOrder sortingOrder);
+    TreeMap<String, List<Book>> getSortedBookList(Sorting sorting, SortingOrder sortingOrder);
 
 
 }
