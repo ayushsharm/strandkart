@@ -96,27 +96,38 @@ public class StrandkartBookDetailsImpl implements StrandKartBookDetails {
         }
     }
 
-    public List<Book> getSortedBookList(Sorting sorting, SortingOrder sortingOrder) {
+    public TreeMap<String, List<Book>> getSortedBookList(Sorting sorting, SortingOrder sortingOrder) {
 
         if (sorting == Sorting.AUTHOR) {
-            return getBooks(sortingOrder, authorBookMap);
+            if(sortingOrder==SortingOrder.ASCENDING){
+                return authorBookMap;
+            }
+            else{
+                return getReverseMap(authorBookMap);
+            }
         } else if (sorting == Sorting.TITLE) {
-            return getBooks(sortingOrder, titleBookMap);
+            if(sortingOrder == SortingOrder.ASCENDING){
+                return titleBookMap;
+            }
+            else {
+                return getReverseMap(titleBookMap);
+            }
         } else {
-            return getBooks(sortingOrder, yearBookMap);
+            if(sortingOrder == SortingOrder.ASCENDING){
+                return yearBookMap;
+            }
+            else{
+                return getReverseMap(yearBookMap);
+            }
         }
     }
 
-    private List<Book> getBooks(SortingOrder sortingOrder, TreeMap<String, List<Book>> bookMap) {
-        if (sortingOrder == SortingOrder.ASCENDING) {
-            return createListWithTreeMap(bookMap);
-        } else {
-            TreeMap<String, List<Book>> reverseTreeMap = new TreeMap<String, List<Book>>(Collections.reverseOrder());
-            for (Map.Entry<String, List<Book>> entry : bookMap.entrySet()) {
-                reverseTreeMap.put(entry.getKey(), entry.getValue());
-            }
-            return createListWithTreeMap(reverseTreeMap);
+    public TreeMap<String, List<Book>> getReverseMap(TreeMap<String, List<Book>> map){
+        TreeMap<String, List<Book>> reverseMap = new TreeMap<String, List<Book>>(Collections.<String>reverseOrder());
+        for (Map.Entry<String, List<Book>> entry : map.entrySet()){
+            reverseMap.put(entry.getKey(), entry.getValue());
         }
+        return reverseMap;
     }
 
     public void close(String fileName) throws IOException {
