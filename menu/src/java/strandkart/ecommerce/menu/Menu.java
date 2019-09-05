@@ -10,7 +10,9 @@ import strandkart.ecommerce.product.productstype.ProductType;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 public class Menu {
 
@@ -98,19 +100,28 @@ public class Menu {
                         break;
                     }
                     long sortStartTime = System.currentTimeMillis();
-                    List<Book> sortedBookList = strandKartBookDetails.getSortedBookList(sorting, sortingOrder);
-                    System.out.println(sortedBookList.size());
+                    TreeMap<String, List<Book>> sortedBookMap = strandKartBookDetails.getSortedBookList(sorting, sortingOrder);
+                    System.out.println(sortedBookMap.size());
                     long sortEndTime = System.currentTimeMillis();
                     System.out.println(String.format("Time taken to sort list : %d ms", sortEndTime - sortStartTime));
                     counter = 0;
-                    for (Book book : sortedBookList) {
-                        System.out.println(book);
-                        counter++;
-                        if (counter % 10 == 0) {
+                    int flag = 1;
+                    for (Map.Entry<String, List<Book>> entry : sortedBookMap.entrySet()) {
+                        List<Book> books = entry.getValue();
+                        for (Book book : books) {
+                            System.out.println(book);
+                            counter++;
+                            if (counter % 10 == 0) {
+                                flag = 0;
+                                break;
+                            }
+                        }
+                        if (flag == 0) {
                             System.out.println("Press 0 to end display\n Press any other key to continue.");
                             if (input.nextInt() == 0) {
                                 break;
                             }
+                            flag = 1;
                         }
                     }
                     break;
