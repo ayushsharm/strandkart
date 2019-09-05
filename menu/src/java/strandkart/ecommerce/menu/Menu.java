@@ -100,28 +100,32 @@ public class Menu {
                         break;
                     }
                     long sortStartTime = System.currentTimeMillis();
+                    long sortStartTimeNano = System.nanoTime();
                     TreeMap<String, List<Book>> sortedBookMap = strandKartBookDetails.getSortedBookList(sorting, sortingOrder);
                     System.out.println(sortedBookMap.size());
                     long sortEndTime = System.currentTimeMillis();
-                    System.out.println(String.format("Time taken to sort list : %d ms", sortEndTime - sortStartTime));
+                    long sortEndTimeNano = System.nanoTime();
+                    if(sortEndTime-sortStartTime>0){
+
+                        System.out.println(String.format("Time taken to sort list : %d ms", sortEndTime - sortStartTime));
+                    }
+                    else{
+                        System.out.println(String.format("Time taken to sort list : %d microseconds", (sortEndTimeNano-sortStartTimeNano)/1000));
+                    }
                     counter = 0;
                     int flag = 1;
                     for (Map.Entry<String, List<Book>> entry : sortedBookMap.entrySet()) {
-                        List<Book> books = entry.getValue();
+                        List<Book> books = sortedBookMap.get(entry.getKey());
                         for (Book book : books) {
                             System.out.println(book);
                             counter++;
                             if (counter % 10 == 0) {
-                                flag = 0;
-                                break;
+                                System.out.println("Press 0 to end display\n Press any other key to continue.");
+                                flag = input.nextInt();
+                                if(flag==0){
+                                    break;
+                                }
                             }
-                        }
-                        if (flag == 0) {
-                            System.out.println("Press 0 to end display\n Press any other key to continue.");
-                            if (input.nextInt() == 0) {
-                                break;
-                            }
-                            flag = 1;
                         }
                     }
                     break;
@@ -129,7 +133,10 @@ public class Menu {
                     input.nextLine();
                     System.out.println("Please enter the name of the book");
                     String bookName = input.nextLine();
+                    long searchStartTime = System.nanoTime();
                     List<Book> books = strandKartBookDetails.searchBookUsingTitle(bookName);
+                    long searchEndTime = System.nanoTime();
+                    System.out.println(String.format("Time taken for search operation = %d microseconds.",(searchEndTime-searchStartTime)/1000));
                     if (books == null) {
                         System.out.println("No books available with this title.");
                         break;
