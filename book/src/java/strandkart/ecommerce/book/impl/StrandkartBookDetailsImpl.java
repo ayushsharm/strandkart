@@ -13,10 +13,13 @@ import java.util.*;
 public class StrandkartBookDetailsImpl implements StrandKartBookDetails {
 
 
-    private static List<Book> allBooks = new ArrayList<Book>();
-    private static TreeMap<String, List<Book>> titleBookMap = new TreeMap<String, List<Book>>();
-    private static TreeMap<String, List<Book>> yearBookMap = new TreeMap<String, List<Book>>();
-    private static TreeMap<String, List<Book>> authorBookMap = new TreeMap<String, List<Book>>();
+    private List<Book> allBooks = new ArrayList<Book>();
+    private TreeMap<String, List<Book>> titleBookMap = new TreeMap<String, List<Book>>();
+    private TreeMap<String, List<Book>> yearBookMap = new TreeMap<String, List<Book>>();
+    private TreeMap<String, List<Book>> authorBookMap = new TreeMap<String, List<Book>>();
+
+    public StrandkartBookDetailsImpl(){
+    }
 
     public StrandkartBookDetailsImpl(String fileName) throws IOException {
         init(fileName);
@@ -27,12 +30,13 @@ public class StrandkartBookDetailsImpl implements StrandKartBookDetails {
         long readStartTIme = System.currentTimeMillis();
         BookFileReaderWriter bookFileReaderWriter = new BookFileReaderWriter(fileName);
         allBooks = bookFileReaderWriter.readFromFile();
+        System.out.println(allBooks.size());
         long readEndTIme = System.currentTimeMillis();
         System.out.println(String.format("Read time = %d", readEndTIme - readStartTIme));
 
         long mapInitStartTime = System.currentTimeMillis();
         addToMaps(allBooks);
-        System.out.println(titleBookMap.size()+"\n"+authorBookMap.size()+"\n"+yearBookMap.size());
+        System.out.println(titleBookMap.size() + "\n" + authorBookMap.size() + "\n" + yearBookMap.size());
         long mapInitEndTime = System.currentTimeMillis();
         System.out.println(String.format("Map init time = %d", mapInitEndTime - mapInitStartTime));
     }
@@ -64,40 +68,25 @@ public class StrandkartBookDetailsImpl implements StrandKartBookDetails {
     }
 
     private void addToMaps(List<Book> books) {
-        List<Book> books1 = new ArrayList<Book>();
         for (Book book : books) {
-            books1.add(book);
-            List<Book> tempBookList = new ArrayList<Book>();
-            if (titleBookMap.containsKey(book.getTitle())) {
-                List<Book> bookfromMap = titleBookMap.get(book.getTitle());
-                tempBookList.addAll(bookfromMap);
-                tempBookList.add(book);
-                titleBookMap.put(book.getTitle(), tempBookList);
-                tempBookList.clear();
-            } else {
-                titleBookMap.put(book.getTitle(), books1);
-            }
+            String title = book.getTitle();
+            String author = book.getAuthor();
+            String year = book.getYear();
+            addToMaps(book, titleBookMap, title);
+            addToMaps(book, authorBookMap, author);
+            addToMaps(book, yearBookMap, year);
+        }
+    }
 
-            if (authorBookMap.containsKey(book.getAuthor())) {
-                List<Book> bookfromMap = authorBookMap.get(book.getAuthor());
-                tempBookList.addAll(bookfromMap);
-                tempBookList.add(book);
-                authorBookMap.put(book.getAuthor(), tempBookList);
-                tempBookList.clear();
-            } else {
-                authorBookMap.put(book.getAuthor(), books1);
-            }
-
-            if (yearBookMap.containsKey(book.getYear())) {
-                List<Book> bookfromMap = yearBookMap.get(book.getYear());
-                tempBookList.addAll(bookfromMap);
-                tempBookList.add(book);
-                yearBookMap.put(book.getYear(), tempBookList);
-                tempBookList.clear();
-            } else {
-                yearBookMap.put(book.getYear(), books1);
-            }
-            books1.clear();
+    private void addToMaps(Book book, TreeMap<String, List<Book>> map, String key){
+        if(map.containsKey(key)){
+            List<Book> bookListFromMap = map.get(key);
+            List<Book> tempBookList = new ArrayList<Book>(bookListFromMap);
+            tempBookList.add(book);
+            map.put(key, tempBookList);
+        }
+        else{
+            map.put(key, Collections.singletonList(book));
         }
     }
 
@@ -137,23 +126,4 @@ public class StrandkartBookDetailsImpl implements StrandKartBookDetails {
         bookFileReaderWriter.writeToFile(allBooks);
     }
 
-    private List<Book> createListWithTreeMap(TreeMap<String, List<Book>> map) {
-        Set set = map.entrySet();
-        Iterator iterator = set.iterator();
-        List<Book> booksSorted = new ArrayList<Book>();
-        int counter = 0;
-        while (iterator.hasNext()) {
-            Map.Entry me = (Map.Entry) iterator.next();
-            List<Book> tempBookList = map.get(me.getKey());
-            if (tempBookList.size() > 1) {
-                counter++;
-            }
-            for (Book book : tempBookList) {
-                booksSorted.add(book);
-            }
-        }
-        System.out.println("Counter for 0 = " + counter);
-        System.out.println(booksSorted.size());
-        return booksSorted;
-    }
 }
