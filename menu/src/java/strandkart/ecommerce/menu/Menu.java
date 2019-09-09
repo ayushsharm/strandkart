@@ -1,11 +1,14 @@
 package strandkart.ecommerce.menu;
 
+import com.google.inject.Inject;
 import strandkart.ecommerce.book.Bindings;
 import strandkart.ecommerce.book.Datamodel.Book;
 import strandkart.ecommerce.book.Sorting;
 import strandkart.ecommerce.book.SortingOrder;
 import strandkart.ecommerce.book.impl.StrandkartBookDetailsImpl;
 import strandkart.ecommerce.book.service.StrandKartBookDetails;
+import strandkart.ecommerce.cart.impl.CartManagementServiceImpl;
+import strandkart.ecommerce.cart.service.CartManagementService;
 import strandkart.ecommerce.product.productstype.ProductType;
 
 import java.io.IOException;
@@ -24,6 +27,7 @@ public class Menu {
         long initStartTime = System.currentTimeMillis();
         System.out.println("Starting Init");
         StrandKartBookDetails strandKartBookDetails = new StrandkartBookDetailsImpl(fileName);
+        CartManagementService cartManagementService = new CartManagementServiceImpl();
         long initEndTime = System.currentTimeMillis();
         System.out.println(String.format("Time taken to load 1 million book data and Initialize the list and maps : %d ms", initEndTime - initStartTime));
         System.out.println("Initialization done");
@@ -36,6 +40,7 @@ public class Menu {
                 "4. Search a particular book.\n" +
                 "5. Store a new book.\n" +
                 "6. Purchase a book.\n" +
+                "7. Show cart.\n" +
                 "7. Exit.");
 
         Scanner input = new Scanner(System.in);
@@ -131,6 +136,7 @@ public class Menu {
                     break;
                 case 4:
                     input.nextLine();
+                    Book book = null;
                     System.out.println("Please enter the name of the book");
                     String bookName = input.nextLine();
                     long searchStartTime = System.nanoTime();
@@ -145,8 +151,13 @@ public class Menu {
                     } else {
                         System.out.println(String.format("%d books found with the title %s. Please provide with the ISBN number :", books.size(), bookName));
                         String isbn = input.nextLine();
-                        Book book = strandKartBookDetails.searchBookUsingIsbn(books, isbn);
+                        book = strandKartBookDetails.searchBookUsingIsbn(books, isbn);
                         System.out.println(book);
+                    }
+                    System.out.println("To add the book to the cart, press 1.\nPress any other key to continue.");
+
+                    if(input.nextInt()==1){
+                        cartManagementService.addToCart(book);
                     }
                     break;
                 case 5:
@@ -176,7 +187,7 @@ public class Menu {
                     System.out.print("Price : ");
                     Double price = input.nextDouble();
                     ProductType productType = ProductType.BOOKS;
-                    Book book = new Book(title, author, isbn, publisher, language, year, bindings, price);
+                    book = new Book(title, author, isbn, publisher, language, year, bindings, price);
                     strandKartBookDetails.addNewBook(book);
                     break;
                 case 6:
