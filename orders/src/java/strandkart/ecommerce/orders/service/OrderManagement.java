@@ -8,8 +8,10 @@ import java.util.List;
 
 public interface OrderManagement {
 
-    void orderBook(Book book, int quantity, Date purchaseDate, Float orderAmount);
+    void orderBook(Book book, int quantity, Double orderAmount);
 
     List<Order> showAllOrders();
+
+    void orderBook(Order order);
 
 }
