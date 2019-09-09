@@ -32,6 +32,7 @@ public class StrandkartBookDetailsImpl implements StrandKartBookDetails {
 
         long mapInitStartTime = System.currentTimeMillis();
         addToMaps(allBooks);
+        System.out.println(titleBookMap.size()+"\n"+authorBookMap.size()+"\n"+yearBookMap.size());
         long mapInitEndTime = System.currentTimeMillis();
         System.out.println(String.format("Map init time = %d", mapInitEndTime - mapInitStartTime));
     }
@@ -123,7 +124,7 @@ public class StrandkartBookDetailsImpl implements StrandKartBookDetails {
         }
     }
 
-    public TreeMap<String, List<Book>> getReverseMap(TreeMap<String, List<Book>> map) {
+    private TreeMap<String, List<Book>> getReverseMap(TreeMap<String, List<Book>> map) {
         TreeMap<String, List<Book>> reverseMap = new TreeMap<String, List<Book>>(Collections.<String>reverseOrder());
         for (Map.Entry<String, List<Book>> entry : map.entrySet()) {
             reverseMap.put(entry.getKey(), entry.getValue());
