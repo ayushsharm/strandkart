@@ -13,15 +13,15 @@ public class Order {
 
     private Integer quantity;
 
-    private Date purchaseDate;
+//    private Date purchaseDate;
 
-    private Float orderAmount;
+    private Double orderAmount;
 
-    public Order(Book book, int quantity, Date purchaseDate, Float orderAmount){
+    public Order(Book book, int quantity, Double orderAmount){
         this.book = book;
 //        this.user = user;
         this.quantity = quantity;
-        this.purchaseDate = purchaseDate;
+//        this.purchaseDate = purchaseDate;
         this.orderAmount = orderAmount;
     }
 
@@ -37,12 +37,17 @@ public class Order {
         return quantity;
     }
 
-    public Date getPurchaseDate() {
-        return purchaseDate;
+//    public Date getPurchaseDate() {
+//        return purchaseDate;
+//    }
+
+    public Double getOrderAmount() {
+        return orderAmount;
     }
 
-    public Float getOrderAmount() {
-        return orderAmount;
+    @Override
+    public String toString(){
+        return book.toString()+"\nQuantity : "+quantity+"\nOrder Amount : ₹"+orderAmount;
     }
 
 }
