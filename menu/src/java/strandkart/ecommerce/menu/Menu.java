@@ -1,6 +1,8 @@
 package strandkart.ecommerce.menu;
 
 import com.google.inject.Inject;
+import com.sun.org.apache.xpath.internal.operations.Or;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import strandkart.ecommerce.book.Bindings;
 import strandkart.ecommerce.book.Datamodel.Book;
 import strandkart.ecommerce.book.Sorting;
@@ -9,9 +11,13 @@ import strandkart.ecommerce.book.impl.StrandkartBookDetailsImpl;
 import strandkart.ecommerce.book.service.StrandKartBookDetails;
 import strandkart.ecommerce.cart.impl.CartManagementServiceImpl;
 import strandkart.ecommerce.cart.service.CartManagementService;
+import strandkart.ecommerce.orders.DataModels.Order;
+import strandkart.ecommerce.orders.impl.OrderManagementImpl;
+import strandkart.ecommerce.orders.service.OrderManagement;
 import strandkart.ecommerce.product.productstype.ProductType;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -28,6 +34,7 @@ public class Menu {
         System.out.println("Starting Init");
         StrandKartBookDetails strandKartBookDetails = new StrandkartBookDetailsImpl(fileName);
         CartManagementService cartManagementService = new CartManagementServiceImpl();
+        OrderManagement orderManagement = new OrderManagementImpl();
         long initEndTime = System.currentTimeMillis();
         System.out.println(String.format("Time taken to load 1 million book data and Initialize the list and maps : %d ms", initEndTime - initStartTime));
         System.out.println("Initialization done");
@@ -41,7 +48,8 @@ public class Menu {
                 "5. Store a new book.\n" +
                 "6. Purchase a book.\n" +
                 "7. Show cart.\n" +
-                "7. Exit.");
+                "8. Show all Orders\n" +
+                "9. Exit.");
 
         Scanner input = new Scanner(System.in);
 
@@ -62,13 +70,22 @@ public class Menu {
                 case 2:
                     List<Book> allBooks = strandKartBookDetails.getAllBooks();
                     int counter = 0;
-                    for (Book book : allBooks) {
-                        System.out.println(book.toString());
+                    for (int i = 0; i < allBooks.size(); i++) {
+                        System.out.println(allBooks.get(i).toString());
                         counter++;
                         if (counter % 10 == 0) {
-                            System.out.println("Press 0 to end display\n Press any other key to continue.");
-                            if (input.nextInt() == 0) {
+                            System.out.println("0: End\n1 : Previous\nPress any other key to continue.");
+                            int selection = input.nextInt();
+                            if (selection == 0) {
                                 break;
+                            } else if (selection == 1) {
+                                if (i >= 19) {
+                                    i = i - 20;
+                                }
+                                else{
+                                    System.out.println("No previous records to display.");
+                                    i = i-10;
+                                }
                             }
                         }
                     }
@@ -110,12 +127,11 @@ public class Menu {
                     System.out.println(sortedBookMap.size());
                     long sortEndTime = System.currentTimeMillis();
                     long sortEndTimeNano = System.nanoTime();
-                    if(sortEndTime-sortStartTime>0){
+                    if (sortEndTime - sortStartTime > 0) {
 
                         System.out.println(String.format("Time taken to sort list : %d ms", sortEndTime - sortStartTime));
-                    }
-                    else{
-                        System.out.println(String.format("Time taken to sort list : %d microseconds", (sortEndTimeNano-sortStartTimeNano)/1000));
+                    } else {
+                        System.out.println(String.format("Time taken to sort list : %d microseconds", (sortEndTimeNano - sortStartTimeNano) / 1000));
                     }
                     counter = 0;
                     int flag = 1;
@@ -126,11 +142,14 @@ public class Menu {
                             counter++;
                             if (counter % 10 == 0) {
                                 System.out.println("Press 0 to end display\n Press any other key to continue.");
-                                flag = input.nextInt();
-                                if(flag==0){
+                                if (input.nextInt() == 1) {
+                                    flag = 0;
                                     break;
                                 }
                             }
+                        }
+                        if (flag == 0) {
+                            break;
                         }
                     }
                     break;
@@ -142,23 +161,37 @@ public class Menu {
                     long searchStartTime = System.nanoTime();
                     List<Book> books = strandKartBookDetails.searchBookUsingTitle(bookName);
                     long searchEndTime = System.nanoTime();
-                    System.out.println(String.format("Time taken for search operation = %d microseconds.",(searchEndTime-searchStartTime)/1000));
+                    System.out.println(String.format("Time taken for search operation = %d microseconds.", (searchEndTime - searchStartTime) / 1000));
                     if (books == null) {
                         System.out.println("No books available with this title.");
                         break;
                     } else if (books.size() == 1) {
                         System.out.println(books.get(0));
+                        System.out.println("To add the book to the cart, press 1.\nPress any other key to continue.");
+                        if (input.nextInt() == 1) {
+                            System.out.println("How many books would you like to add to the cart : ");
+                            int quantity = input.nextInt();
+                            Double orderAmount = quantity * books.get(0).getPrice();
+                            Order order = new Order(books.get(0), quantity, orderAmount);
+                            cartManagementService.addToCart(order);
+                        }
                     } else {
                         System.out.println(String.format("%d books found with the title %s. Please provide with the ISBN number :", books.size(), bookName));
                         String isbn = input.nextLine();
                         book = strandKartBookDetails.searchBookUsingIsbn(books, isbn);
                         System.out.println(book);
-                    }
-                    System.out.println("To add the book to the cart, press 1.\nPress any other key to continue.");
 
-                    if(input.nextInt()==1){
-                        cartManagementService.addToCart(book);
+                        System.out.println("To add the book to the cart, press 1.\nPress any other key to continue.");
+
+                        if (input.nextInt() == 1) {
+                            System.out.println("How many books would you like to add to the cart : ");
+                            int quantity = input.nextInt();
+                            Double orderAmount = quantity * book.getPrice();
+                            Order order = new Order(book, quantity, orderAmount);
+                            cartManagementService.addToCart(order);
+                        }
                     }
+
                     break;
                 case 5:
                     input.nextLine();
@@ -212,16 +245,35 @@ public class Menu {
                     System.out.println("How many books would you like to purchase");
                     int quantity = input.nextInt();
                     double orderAmount = quantity * book.getPrice();
+                    orderManagement.orderBook(book, quantity, orderAmount);
                     System.out.println("Order placed for book : " + book.toString() + "Total amount : ₹" + orderAmount + "\n");
                     break;
                 case 7:
+                    List<Order> cart = cartManagementService.showCart();
+                    for (Order order : cart) {
+                        System.out.println(order);
+                    }
+                    System.out.println("Press 1 to purchase the cart : ");
+                    if (input.nextInt() == 1) {
+                        for (Order order : cart) {
+                            orderManagement.orderBook(order);
+                        }
+                    }
+                    break;
+                case 8:
+                    List<Order> orders = orderManagement.showAllOrders();
+                    for (Order order : orders) {
+                        System.out.println(order);
+                    }
+                    break;
+                case 9:
                     //strandKartBookDetails.close(fileName);
                     System.out.println("Thank you for using StrandKart");
                     break;
             }
-            if (choice == 7) {
+            if (choice == 9) {
                 break;
-            } else if (choice < 0 || choice > 7) {
+            } else if (choice < 0 || choice > 9) {
                 System.out.println("Invalid option selected");
             }
             System.out.println("Select Option to Continue\n" +
@@ -231,7 +283,9 @@ public class Menu {
                     "4. Search a particular book.\n" +
                     "5. Store a new book.\n" +
                     "6. Purchase a book.\n" +
-                    "7. Exit.");
+                    "7. Show cart.\n" +
+                    "8. Show all Orders.\n" +
+                    "9. Exit.");
         }
     }
 }
