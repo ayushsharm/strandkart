@@ -18,10 +18,7 @@ import strandkart.ecommerce.product.productstype.ProductType;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.TreeMap;
+import java.util.*;
 
 public class Menu {
 
@@ -81,10 +78,9 @@ public class Menu {
                             } else if (selection == 1) {
                                 if (i >= 19) {
                                     i = i - 20;
-                                }
-                                else{
+                                } else {
                                     System.out.println("No previous records to display.");
-                                    i = i-10;
+                                    i = i - 10;
                                 }
                             }
                         }
@@ -135,18 +131,12 @@ public class Menu {
                     }
                     counter = 0;
                     int flag = 1;
+                    List<Book> booksToDisplay = new ArrayList<Book>();
                     for (Map.Entry<String, List<Book>> entry : sortedBookMap.entrySet()) {
                         List<Book> books = sortedBookMap.get(entry.getKey());
-                        for (Book book : books) {
-                            System.out.println(book);
-                            counter++;
-                            if (counter % 10 == 0) {
-                                System.out.println("Press 0 to end display\n Press any other key to continue.");
-                                if (input.nextInt() == 1) {
-                                    flag = 0;
-                                    break;
-                                }
-                            }
+                        booksToDisplay.addAll(books);
+                        if (booksToDisplay.size() % 10 == 0) {
+
                         }
                         if (flag == 0) {
                             break;
@@ -286,6 +276,17 @@ public class Menu {
                     "7. Show cart.\n" +
                     "8. Show all Orders.\n" +
                     "9. Exit.");
+        }
+    }
+
+    public void displayBooks(TreeMap<String, List<Book>> map) {
+        List<Book> booksToDisplay = new ArrayList<Book>();
+        for (Map.Entry<String, List<Book>> entry : map.entrySet()) {
+            List<Book> books = map.get(entry.getKey());
+            booksToDisplay.addAll(books);
+            if(booksToDisplay.size()>10){
+
+            }
         }
     }
 }
