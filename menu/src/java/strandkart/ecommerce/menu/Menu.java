@@ -1,6 +1,7 @@
 package strandkart.ecommerce.menu;
 
 import com.google.inject.Inject;
+import com.sun.deploy.util.OrderedHashSet;
 import com.sun.org.apache.xpath.internal.operations.Or;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import strandkart.ecommerce.book.Bindings;
@@ -131,6 +132,7 @@ public class Menu {
                     }
                     counter = 0;
                     int flag = 1;
+                    displayBooks(sortedBookMap, sortingOrder, input);
                     List<Book> booksToDisplay = new ArrayList<Book>();
                     for (Map.Entry<String, List<Book>> entry : sortedBookMap.entrySet()) {
                         List<Book> books = sortedBookMap.get(entry.getKey());
@@ -279,14 +281,56 @@ public class Menu {
         }
     }
 
-    public void displayBooks(TreeMap<String, List<Book>> map) {
+    private static void displayBooks(TreeMap<String, List<Book>> map, SortingOrder sortingOrder, Scanner input) {
+        Set<String> iteratorSet;
+        if (sortingOrder == SortingOrder.ASCENDING) {
+            iteratorSet = map.keySet();
+        } else {
+            iteratorSet = map.descendingKeySet();
+        }
         List<Book> booksToDisplay = new ArrayList<Book>();
-        for (Map.Entry<String, List<Book>> entry : map.entrySet()) {
-            List<Book> books = map.get(entry.getKey());
-            booksToDisplay.addAll(books);
-            if(booksToDisplay.size()>10){
-
+        int currentBookIndex = 0;
+        int indexLeftAt = 0;
+        for (String key : iteratorSet) {
+            booksToDisplay.addAll(map.get(key));
+            if (booksToDisplay.size() - currentBookIndex >= 10) {
+                currentBookIndex = iterateBookList(booksToDisplay, currentBookIndex, input);
+                if (currentBookIndex == -1) {
+                    return;
+                }
             }
         }
+    }
+
+
+    private static int iterateBookList(List<Book> books, int currentBookIndex, Scanner input) {
+        while (currentBookIndex != -1 && currentBookIndex < books.size()) {
+            for (int i = currentBookIndex; i < currentBookIndex + 10; i++) {
+                System.out.println(books.get(i));
+            }
+            currentBookIndex += 10;
+            System.out.println("Press 0 to exit\nPress 1 to move forward\nPress 2 to move backward");
+            int choice = input.nextInt();
+            while (choice != 0 && choice != 1 && choice != 2) {
+                System.out.println("Invalid choice. Please enter the correct option : ");
+                choice = input.nextInt();
+            }
+            if (choice == 1) {
+                if (currentBookIndex == books.size() || currentBookIndex + 10 < books.size()) {
+                    return currentBookIndex;
+                }
+            } else if (choice == 2) {
+                if (currentBookIndex - 20 >= 0) {
+                    currentBookIndex -= 20;
+                } else {
+                    System.out.println("No previous books to Display.");
+                    currentBookIndex -= 10;
+                }
+            } else {
+                return -1;
+            }
+
+        }
+        return currentBookIndex;
     }
 }
