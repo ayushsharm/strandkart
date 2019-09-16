@@ -1,12 +1,10 @@
 package strandkart.ecommerce.orders.impl;
 
-import strandkart.ecommerce.book.Datamodel.Book;
-import strandkart.ecommerce.orders.DataModels.Order;
+import strandkart.ecommerce.book.datamodel.Book;
+import strandkart.ecommerce.orders.datamodels.Order;
 import strandkart.ecommerce.orders.service.OrderManagement;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 
