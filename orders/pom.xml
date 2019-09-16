@@ -5,25 +5,23 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>orders</artifactId>
+    <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
     <dependencies>
         <dependency>
             <groupId>ecommerce</groupId>
             <artifactId>book</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>ecommerce</groupId>
             <artifactId>user</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>ecommerce</groupId>
             <artifactId>product</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 
