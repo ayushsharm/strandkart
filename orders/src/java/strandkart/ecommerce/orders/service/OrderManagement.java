@@ -1,9 +1,8 @@
 package strandkart.ecommerce.orders.service;
 
-import strandkart.ecommerce.book.Datamodel.Book;
-import strandkart.ecommerce.orders.DataModels.Order;
+import strandkart.ecommerce.book.datamodel.Book;
+import strandkart.ecommerce.orders.datamodels.Order;
 
-import java.util.Date;
 import java.util.List;
 
 public interface OrderManagement {
