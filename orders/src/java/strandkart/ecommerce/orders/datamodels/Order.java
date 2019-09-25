@@ -16,7 +16,7 @@ public class Order {
 
     private Double orderAmount;
 
-    public Order(Book book, int quantity, Double orderAmount){
+    public Order(Book book, int quantity, Double orderAmount) {
         this.book = book;
 //        this.user = user;
         this.quantity = quantity;
@@ -44,9 +44,14 @@ public class Order {
         return orderAmount;
     }
 
+    public Order increaseQuantity(int quantity) {
+        this.quantity += quantity;
+        return this;
+    }
+
     @Override
-    public String toString(){
-        return book.toString()+"\nQuantity : "+quantity+"\nOrder Amount : ₹"+orderAmount;
+    public String toString() {
+        return book.toString() + "Quantity : " + quantity + "\nOrder Amount : ₹" + orderAmount;
     }
 
 }
