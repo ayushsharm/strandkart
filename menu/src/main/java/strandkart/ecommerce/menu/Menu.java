@@ -47,7 +47,7 @@ public class Menu {
         Scanner input = new Scanner(System.in);
 
         int choice = 0;
-        while (choice != 6) {
+        while (true) {
 
             choice = input.nextInt();
 
@@ -63,15 +63,19 @@ public class Menu {
                 case 2:
                     List<Book> allBooks = strandKartBookDetails.getAllBooks();
                     int counter = 0;
+                    printBookHeaders();
                     for (int i = 0; i < allBooks.size(); i++) {
-                        System.out.println(allBooks.get(i).toString());
+                        listview(allBooks.get(i));
+//                        System.out.println(allBooks.get(i).toString());
                         counter++;
                         if (counter % 10 == 0) {
                             System.out.println("0: End\n1 : Previous\nPress any other key to continue.");
                             int selection = input.nextInt();
                             if (selection == 0) {
                                 break;
-                            } else if (selection == 1) {
+                            }
+                            printBookHeaders();
+                            if (selection == 1) {
                                 if (i >= 19) {
                                     i = i - 20;
                                 } else {
@@ -127,7 +131,8 @@ public class Menu {
                     }
                     counter = 0;
                     int flag = 1;
-                    displayBooks(sortedBookMap, sortingOrder, input);
+                    boolean displayListView = true;
+                    displayBooks(sortedBookMap, sortingOrder, input, displayListView);
                     List<Book> booksToDisplay = new ArrayList<Book>();
                     for (Map.Entry<String, List<Book>> entry : sortedBookMap.entrySet()) {
                         List<Book> books = sortedBookMap.get(entry.getKey());
@@ -166,6 +171,10 @@ public class Menu {
                         System.out.println(String.format("%d books found with the title %s. Please provide with the ISBN number :", books.size(), bookName));
                         String isbn = input.nextLine();
                         book = strandKartBookDetails.searchBookUsingIsbn(books, isbn);
+                        if (book == null) {
+                            System.out.println("Invalid ISBN number");
+                            break;
+                        }
                         System.out.println(book);
 
                         System.out.println("To add the book to the cart, press 1.\nPress any other key to continue.");
@@ -240,10 +249,21 @@ public class Menu {
                     for (Order order : cart) {
                         System.out.println(order);
                     }
-                    System.out.println("Press 1 to purchase the cart : ");
-                    if (input.nextInt() == 1) {
+                    System.out.println("1. Purchase Cart.\n2. Clear Cart.\n3. Remove a book from Cart. : \n ");
+                    int selection = input.nextInt();
+                    if (selection == 1) {
                         for (Order order : cart) {
                             orderManagement.orderBook(order);
+                        }
+                        cartManagementService.clearCart();
+                    } else if (selection == 2) {
+                        cartManagementService.clearCart();
+                    } else if (selection == 3) {
+                        System.out.println("Enter the book index to delete the book");
+                        int indexToDelete = input.nextInt();
+                        System.out.println(String.format("Are you sure you want to delete the book %s\n Press 1 to Delete", cart.get(indexToDelete-1)));
+                        if(input.nextInt()==1) {
+                            cartManagementService.removeBook(indexToDelete-1);
                         }
                     }
                     break;
@@ -276,7 +296,7 @@ public class Menu {
         }
     }
 
-    private static void displayBooks(TreeMap<String, List<Book>> map, SortingOrder sortingOrder, Scanner input) {
+    private static void displayBooks(TreeMap<String, List<Book>> map, SortingOrder sortingOrder, Scanner input, boolean displayListView) {
         Set<String> iteratorSet;
         if (sortingOrder == SortingOrder.ASCENDING) {
             iteratorSet = map.keySet();
@@ -289,7 +309,7 @@ public class Menu {
         for (String key : iteratorSet) {
             booksToDisplay.addAll(map.get(key));
             if (booksToDisplay.size() - currentBookIndex >= 10) {
-                currentBookIndex = iterateBookList(booksToDisplay, currentBookIndex, input);
+                currentBookIndex = iterateBookList(booksToDisplay, currentBookIndex, input, displayListView);
                 if (currentBookIndex == -1) {
                     return;
                 }
@@ -298,10 +318,14 @@ public class Menu {
     }
 
 
-    private static int iterateBookList(List<Book> books, int currentBookIndex, Scanner input) {
+    private static int iterateBookList(List<Book> books, int currentBookIndex, Scanner input, boolean displayListView) {
         while (currentBookIndex != -1 && currentBookIndex < books.size()) {
+            printBookHeaders();
             for (int i = currentBookIndex; i < currentBookIndex + 10; i++) {
-                System.out.println(books.get(i));
+                if (displayListView)
+                    listview(books.get(i));
+                else
+                    System.out.println(books.get(i));
             }
             currentBookIndex += 10;
             System.out.println("Press 0 to exit\nPress 1 to move forward\nPress 2 to move backward");
@@ -327,5 +351,14 @@ public class Menu {
 
         }
         return currentBookIndex;
+    }
+
+    private static void printBookHeaders() {
+        System.out.println("Title\tAuthor\tISBN\tPublisher\tYear\tBinding\tPrice");
+    }
+
+    private static void listview(Book book) {
+        System.out.println(book.getTitle() + "\t" + book.getAuthor() + "\t" + book.getISBN() + "\t" + book.getPublisher() + "\t" +
+                book.getYear() + "\t" + book.getBindings() + "\t" + book.getPrice());
     }
 }
