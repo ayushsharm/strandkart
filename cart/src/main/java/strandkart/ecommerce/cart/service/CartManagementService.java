@@ -10,4 +10,8 @@ public interface CartManagementService {
 
     List<Order> showCart();
 
+    void clearCart();
+
+    void removeBook(int index);
+
 }
