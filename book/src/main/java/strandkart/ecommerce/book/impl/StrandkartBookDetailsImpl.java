@@ -40,11 +40,13 @@ public class StrandkartBookDetailsImpl implements StrandKartBookDetails {
         System.out.println(String.format("Map init time = %d", mapInitEndTime - mapInitStartTime));
     }
 
+    @Override
     public List<Book> getAllBooks() {
         System.out.println(allBooks.size());
         return allBooks;
     }
 
+    @Override
     public List<Book> searchBookUsingTitle(String bookName) {
         if (titleBookMap.containsKey(bookName)) {
             return titleBookMap.get(bookName);
@@ -52,6 +54,7 @@ public class StrandkartBookDetailsImpl implements StrandKartBookDetails {
         return null;
     }
 
+    @Override
     public Book searchBookUsingIsbn(List<Book> books, String isbn) {
         for (Book book : books) {
             if (book.getISBN().equals(isbn)) {
@@ -61,6 +64,7 @@ public class StrandkartBookDetailsImpl implements StrandKartBookDetails {
         return null;
     }
 
+    @Override
     public void addNewBook(Book book) {
         allBooks.add(book);
         addToMaps(Collections.singletonList(book));
@@ -89,6 +93,7 @@ public class StrandkartBookDetailsImpl implements StrandKartBookDetails {
         }
     }
 
+    @Override
     public TreeMap<String, List<Book>> getSortedBookList(Sorting sorting, SortingOrder sortingOrder) {
 
         if (sorting == Sorting.AUTHOR) {
@@ -120,6 +125,7 @@ public class StrandkartBookDetailsImpl implements StrandKartBookDetails {
         return reverseMap;
     }
 
+    @Override
     public void close(String fileName) throws IOException {
         BookFileReaderWriter bookFileReaderWriter = new BookFileReaderWriter(fileName);
         bookFileReaderWriter.writeToFile(allBooks);
