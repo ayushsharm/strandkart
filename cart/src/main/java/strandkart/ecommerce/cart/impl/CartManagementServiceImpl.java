@@ -12,12 +12,23 @@ public class CartManagementServiceImpl implements CartManagementService {
 
     public CartManagementServiceImpl() {}
 
+    @Override
     public void addToCart(Order order) {
         cart.add(order);
     }
 
+    @Override
     public List<Order> showCart() {
         return cart;
     }
 
+    @Override
+    public void clearCart() {
+        cart.clear();
+    }
+
+    @Override
+    public void removeBook(int index) {
+        cart.remove(index);
+    }
 }
